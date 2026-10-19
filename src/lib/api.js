@@ -2,6 +2,24 @@ const API_BASE = (
   import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 ).replace(/\/$/, '')
 let accessToken = null
+// Refresh token is also kept in localStorage: the httpOnly cookie is cross-site (Vercel -> API domain)
+// and browsers often block it, which logged the user out on every reload.
+const RT_KEY = 'mb_refresh_token'
+const getRefreshToken = () => {
+  try {
+    return localStorage.getItem(RT_KEY)
+  } catch {
+    return null
+  }
+}
+const setRefreshToken = token => {
+  try {
+    if (token) localStorage.setItem(RT_KEY, token)
+    else localStorage.removeItem(RT_KEY)
+  } catch {
+    /* storage unavailable */
+  }
+}
 export const setAccessToken = token => {
   accessToken = token || null
 }
@@ -10,6 +28,7 @@ export const getAccessToken = () => accessToken
 async function request(path, options = {}, retry = true) {
   const headers = {
     'Content-Type': 'application/json',
+    'X-Client': 'mobile', // backend then also returns the refresh token in the JSON body
     ...(options.headers || {})
   }
   if (accessToken) headers.Authorization = `Bearer ${accessToken}`
@@ -46,10 +65,29 @@ async function request(path, options = {}, retry = true) {
   return body
 }
 const json = (method, data) => ({ method, body: JSON.stringify(data) })
-export async function refreshSession() {
-  const result = await request('/auth/refresh', json('POST', {}), false)
-  setAccessToken(result.data?.accessToken)
-  return Boolean(result.data?.accessToken)
+let refreshing = null
+export function refreshSession() {
+  // One refresh at a time (StrictMode / parallel queries would otherwise rotate the token twice)
+  if (!refreshing) {
+    refreshing = (async () => {
+      try {
+        const result = await request(
+          '/auth/refresh',
+          json('POST', { refreshToken: getRefreshToken() || undefined }),
+          false
+        )
+        setAccessToken(result.data?.accessToken)
+        if (result.data?.refreshToken) setRefreshToken(result.data.refreshToken)
+        return Boolean(result.data?.accessToken)
+      } catch (err) {
+        if (err.status === 401) setRefreshToken(null) // only drop it when the server rejects it
+        throw err
+      } finally {
+        refreshing = null
+      }
+    })()
+  }
+  return refreshing
 }
 
 export const api = {
@@ -115,6 +153,7 @@ export const api = {
   async login(data) {
     const r = await request('/auth/login', json('POST', data), false)
     setAccessToken(r.data.accessToken)
+    setRefreshToken(r.data.refreshToken)
     return r.data
   },
   async register(data) {
@@ -123,6 +162,7 @@ export const api = {
   async verifyEmail(data) {
     const r = await request('/auth/verify-email', json('POST', data), false)
     setAccessToken(r.data.accessToken)
+    setRefreshToken(r.data.refreshToken)
     return r.data
   },
   async resendCode(data) {
@@ -130,9 +170,14 @@ export const api = {
   },
   async logout() {
     try {
-      await request('/auth/logout', json('POST', {}), false)
+      await request(
+        '/auth/logout',
+        json('POST', { refreshToken: getRefreshToken() || undefined }),
+        false
+      )
     } finally {
       setAccessToken(null)
+      setRefreshToken(null)
     }
   },
   async feed(params = {}) {
@@ -349,9 +394,7 @@ export const api = {
     })
   },
   async updatePrivacy(privacy) {
-    return (
-      await request('/users/me/privacy', json('PATCH', { privacy }))
-    ).data
+    return (await request('/users/me/privacy', json('PATCH', { privacy }))).data
   },
   async messageableUsers() {
     return (await request('/users/me/messageable')).data || []
