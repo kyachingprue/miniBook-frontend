@@ -24,7 +24,7 @@ export function Logo({ className = '' }) {
       <img
         src={logo}
         alt="MiniBook logo"
-        className="h-5 w-7 pr-2 object-cover md:h-10 md:w-10 lg:h-12 lg:w-12"
+        className="h-5 w-9 pr-2 object-cover md:h-10 md:w-10 lg:h-12 lg:w-12"
       />
       <span className="text-md font-extrabold tracking-tight text-black dark:text-white lg:text-xl">
         MiniBook
