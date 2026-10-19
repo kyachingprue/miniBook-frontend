@@ -228,7 +228,7 @@ export default function Profile() {
       />
 
       <Card className="mb-4 overflow-hidden">
-        <div className="relative h-36 bg-gradient-to-br from-violet-600 to-pink-500 sm:h-72">
+        <div className="relative h-48 bg-gradient-to-br from-violet-600 to-pink-500 sm:h-72">
           {user.cover && (
             <img
               src={user.cover}
