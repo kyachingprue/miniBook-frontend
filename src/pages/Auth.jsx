@@ -29,15 +29,15 @@ import { api } from '@/lib/api'
 import { useDispatch } from 'react-redux'
 import { login } from '@/store/authSlice'
 
-const usernameSchema = z
-  .string()
-  .trim()
-  .min(3, 'Username must be at least 3 characters.')
-  .max(20, 'Username cannot exceed 20 characters.')
-  .regex(
-    /^[a-zA-Z0-9_]+$/,
-    'Only letters, numbers, and underscores are allowed.'
-  )
+// const usernameSchema = z
+//   .string()
+//   .trim()
+//   .min(3, 'Username must be at least 3 characters.')
+//   .max(20, 'Username cannot exceed 20 characters.')
+//   .regex(
+//     /^[a-zA-Z0-9_]+$/,
+//     'Only letters, numbers, and underscores are allowed.'
+//   )
 
 const emailSchema = z
   .string()
@@ -179,9 +179,9 @@ export default function Auth({ mode = 'login' }) {
 
   const email = watch('email', '')
   const password = watch('password', '')
-  const name = watch('name', '')
-  const username = watch('username', '')
-  const code = watch('code', '')
+  // const name = watch('name', '')
+  // const username = watch('username', '')
+  // const code = watch('code', '')
 
   const mutate = useMutation({
     mutationFn: async values => {
@@ -324,7 +324,7 @@ export default function Auth({ mode = 'login' }) {
         className="relative z-10 w-full max-w-md"
       >
         <Card className="overflow-hidden rounded-3xl border border-white/70 bg-white/90 p-6 shadow-2xl shadow-violet-950/10 backdrop-blur-xl dark:border-neutral-800 dark:bg-neutral-900/90 sm:p-8">
-          <Logo className="mb-4 justify-center" />
+          <Logo className="mb-4 items-center"/>
 
           <div className="mb-6 text-center">
             <h1 className="text-2xl font-extrabold tracking-tight text-neutral-900 dark:text-white sm:text-3xl">
