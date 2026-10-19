@@ -1,7 +1,7 @@
 // Minimal service worker: makes the app installable and shows an offline fallback for page loads.
 // API calls and other cross-origin requests are never cached.
 const CACHE = 'minibook-v1'
-const SHELL = ['/', '/favicon.svg', '/pwa-192.png']
+const SHELL = ['/', '/favicon.png', '/pwa-192.png']
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)))
