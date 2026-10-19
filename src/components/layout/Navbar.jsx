@@ -24,7 +24,7 @@ export function Logo({ className = '' }) {
       <img
         src={logo}
         alt="MiniBook logo"
-        className="h-8 w-8 object-cover md:h-10 md:w-10 lg:h-12 lg:w-12"
+        className="h-5 w-5 pr-2 object-cover md:h-10 md:w-10 lg:h-12 lg:w-12"
       />
       <span className="text-md font-extrabold tracking-tight text-black dark:text-white lg:text-xl">
         MiniBook
@@ -164,7 +164,7 @@ export default function Navbar() {
             aria-label="Search"
             onClick={() => navigate('/explore')}
           >
-            <Search className="h-4 w-4 md:h-5 md:w-5" />
+            <Search className="h-5 w-5" />
           </Button>
           <ThemeCycleButton />
           {isAdmin && (
@@ -175,7 +175,7 @@ export default function Navbar() {
               title="Admin dashboard"
               onClick={() => navigate('/admin')}
             >
-              <LayoutDashboard className="h-4 w-4 md:h-5 md:w-5" />
+              <LayoutDashboard className="h-5 w-5" />
             </Button>
           )}
           <Button
@@ -199,7 +199,7 @@ export default function Navbar() {
             className="relative"
             onClick={() => navigate('/notifications')}
           >
-            <Bell className="h-4 w-4 md:h-5 md:w-5" />
+            <Bell className="h-5 w-5" />
             {(unread.data || 0) > 0 && (
               <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-bold text-white ring-2 ring-white dark:ring-neutral-950">
                 {unread.data > 99 ? '99+' : unread.data}
@@ -208,7 +208,7 @@ export default function Navbar() {
           </Button>
           {user && (
             <Link to="/profile" aria-label="Your profile" className="ml-1 border border-transparent hover:border-neutral-300 focus:border-neutral-300 focus:outline-none dark:hover:border-neutral-700 dark:focus:border-neutral-700 rounded-full">
-              <UserAvatar user={user} className="h-7 w-7 md:h-10 md:w-10" />
+              <UserAvatar user={user} className="h-10 w-10" />
             </Link>
           )}
         </div>
