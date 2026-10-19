@@ -4,6 +4,7 @@ import { mainNav } from "@/config/nav";
 import NavItem from "./NavItem";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitch } from "@/components/ThemeToggle";
+import InstallAppButton from "@/components/InstallAppButton";
 
 export default function LeftSidebar() {
   return (
@@ -21,6 +22,7 @@ export default function LeftSidebar() {
       <div className="mt-auto pt-4">
         <p className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Appearance</p>
         <ThemeSwitch />
+        <InstallAppButton className="mt-3" />
       </div>
     </aside>
   );

@@ -9,6 +9,13 @@ import { store } from '@/store'
 import App from './App'
 import './index.css'
 import { Toaster } from 'react-hot-toast'
+
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {})
+  })
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>

@@ -11,6 +11,7 @@ import { Logo } from "./Navbar";
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/ui/avatar";
 import { ThemeSwitch } from "@/components/ThemeToggle";
+import InstallAppButton from "@/components/InstallAppButton";
 import { compact } from "@/lib/utils";
 import { api, setAccessToken } from "../../lib/api";
 import toast from "react-hot-toast";
@@ -126,6 +127,7 @@ export default function MobileDrawer() {
 
             <div className="flex flex-col gap-3 border-t border-neutral-200 p-4 dark:border-neutral-800">
               <ThemeSwitch />
+              <InstallAppButton />
               <Button variant="outline" onClick={signout}>
                 <LogOut className="h-4 w-4" />
                 Log out
